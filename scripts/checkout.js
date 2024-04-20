@@ -4,6 +4,8 @@ import { formatCurrency } from "./utils/money.js";
 
 let cartSummary = '';
 
+updateCartQuantity();
+
 cart.forEach((cartItem) => {
     const productId = cartItem.productId;
     let matchingProduct;
@@ -93,9 +95,18 @@ document.querySelectorAll('.js-delete-quantity-link').forEach((button) => {
     button.addEventListener('click', () => {
         const productId = button.dataset.productId;
         removeFromCart(productId);
-
         document.querySelector(
             `.js-cart-item-container-${productId}`
         ).remove();
+        updateCartQuantity();
     });
 });
+
+function updateCartQuantity() {
+    let cartQuantity = 0;
+    cart.forEach((cartItem) => {
+        cartQuantity += cartItem.quantity;
+    });
+    document.querySelector('.js-return-to-home-link')
+        .innerHTML = `${cartQuantity} items`;
+}

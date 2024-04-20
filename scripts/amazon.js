@@ -60,6 +60,7 @@ products.forEach((product) => {
     });
     document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
   }
+  UpdateCartQuantity();
 
   document.querySelectorAll('.js-add-to-cart').forEach((button) => {
     button.addEventListener('click', () => {
