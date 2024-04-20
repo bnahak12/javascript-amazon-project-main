@@ -5,12 +5,14 @@ if (!cart) {
         {
             productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
             productName: 'Black and Gray Athletic Cotton Socks - 6 Pairs',
-            quantity: 2
+            quantity: 2,
+            deliveryOptionsId: '1'
         },
         {
             productId: '15b6fc6f-327a-4ec4-896f-486349e85a3d',
             productName: 'Intermediate Size Basketball',
-            quantity: 1
+            quantity: 1,
+            deliveryOptionsId: '3'
         }
     ]
 }
@@ -34,7 +36,8 @@ export function addToCart(productId, productName) {
         cart.push({
             productId: productId,
             productName: productName,
-            quantity: 1
+            quantity: 1,
+            deliveryOptionsId: '1'
         });
     }
 
