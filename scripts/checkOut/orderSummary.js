@@ -1,10 +1,11 @@
 import { cart, removeFromCart, updateDeliveryOption } from "../../data/cart.js";
-import { deliveryOptions, getDeliveryOption } from "../../data/deliveryOptions.js";
+import { deliveryOptions, getDeliveryOption, getDeliveryDate } from "../../data/deliveryOptions.js";
 import { products, getProduct } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
-import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
+import { renderPaymentSummary } from "./paymentSummary.js";
+import { rendercheckOutHeader } from "./checkOutHeader.js";
 
-updateCartQuantity();
+//updateCartQuantity();
 
 export function renderOrderSummary() {
     let cartSummary = '';
@@ -12,12 +13,12 @@ export function renderOrderSummary() {
 
         const productId = cartItem.productId;
         const matchingProduct = getProduct(productId);
+
         const deliveryOptionId = cartItem.deliveryOptionsId;
+
         const deliveryOption = getDeliveryOption(deliveryOptionId);
 
-        const today = dayjs();
-        const deliveryDate = today.add(deliveryOption.deliverDays, 'days');
-        const dateString = deliveryDate.format('dddd, MMMM D');
+        const dateString = getDeliveryDate(deliveryOption);
 
 
         cartSummary +=
@@ -66,10 +67,10 @@ export function renderOrderSummary() {
         button.addEventListener('click', () => {
             const productId = button.dataset.productId;
             removeFromCart(productId);
-            document.querySelector(
-                `.js-cart-item-container-${productId}`
-            ).remove();
-            updateCartQuantity();
+            rendercheckOutHeader();
+            renderOrderSummary();
+            //updateCartQuantity();
+            renderPaymentSummary();
         });
     });
 
@@ -80,9 +81,8 @@ export function renderOrderSummary() {
         let html = '';
 
         deliveryOptions.forEach((deliveryOption) => {
-            const today = dayjs();
-            const deliveryDate = today.add(deliveryOption.deliverDays, 'days');
-            const dateString = deliveryDate.format('dddd, MMMM D');
+
+            const dateString = getDeliveryDate(deliveryOption);
             const priceString = deliveryOption.priceCents === 0 ? 'FREE' : `$${formatCurrency(deliveryOption.priceCents)}-`
 
             const isChecked = deliveryOption.id === cartItem.deliveryOptionsId
@@ -111,6 +111,7 @@ export function renderOrderSummary() {
             const { productId, optionId } = element.dataset;
             updateDeliveryOption(productId, optionId);
             renderOrderSummary();
+            renderPaymentSummary();
         });
     });
 }
